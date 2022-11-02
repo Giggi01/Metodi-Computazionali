@@ -5,8 +5,6 @@ import numpy as np
 #Lettura file 
 
 df_fromfile = pd.read_csv('oscilloscope.csv')
-print(type(df_fromfile))
-
 time = df_fromfile['time']
 signal1 = df_fromfile['signal1']
 signal2 = df_fromfile['signal2']
@@ -41,41 +39,31 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-print(len(signal1))
 
 #Calcolo della derivata tramite il metodo della differenza centrale
 
 #Definisco una funzione che implementa una versione della differenza centrale
-# f'(i) =  [f(i+1)-f(i-1)] / [x(i+1)-x[i-1]]
+# f'(i) =  [f(i+nh)-f(i-nh)] / [x(i+nh)-x[i-nh]]
 
-def my_derivative(xx, yy):
-    num = np.array([])
-    den = np.array([])
-    for i in range(len(yy)):
-        print(i)
-        if i == 0:
-            num = np.append(num, yy[1] - yy[0])
-        elif i == len(yy):
-            print('.')
-            num = np.append(num, yy[len(yy)] - yy[len(yy)-1])
-        if i > 0 and i < len(yy) :
-            num = np.append(num, yy[i+1] - yy[i-1])
-        elif i == len(yy):
-            num = np.append(num, yy[len(yy)] - yy[len(yy)-1])
+timearray = time.to_numpy()
+signal1array = signal1.to_numpy()
+signal2array = signal2.to_numpy()
 
-    for l in range(len(xx)):
-        if l == 0:
-            den = np.append(den, xx[1] - xx[0])
-        if l > 0 and l < len(xx) :
-            den = np.append(den, xx[i+1] - xx[i-1])
-        elif l == len(xx):
-            den = np.append(den, xx[len(xx)] - xx[len(xx)-1])
+def my_derivative(xx, yy, nh):
+    dd = yy[nh:] - yy[:-nh]
+    hh = xx[nh:] - xx[:-nh]
+    for ih in range(int(nh/2)):
+        dd = np.append(yy[nh-ih-1]-yy[0], dd)
+        dd = np.append(dd, yy[-1]-yy[-(nh-ih)])
+    
+        hh = np.append(xx[nh-ih-1]-xx[0], hh)
+        hh = np.append(hh, xx[-1]-xx[-(nh-ih)])
+    
+    return dd/hh
 
-    return num/den
+derivatadiffcensegn1 = my_derivative(timearray, signal1array, 20)
+derivatadiffcensegn2 = my_derivative(timearray, signal2array, 20)
 
-derivatadiffcensegn1 = my_derivative(time, signal1)
-print(derivatadiffcensegn1)
-derivatadiffcensegn2 = my_derivative(time, signal2)
 
 #Gafico delle due derivate con il metodo della differenza centrale 
 
