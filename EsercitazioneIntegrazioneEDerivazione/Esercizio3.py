@@ -43,6 +43,7 @@ plt.show()
 #Calcolo della derivata tramite il metodo della differenza centrale
 
 #Definisco una funzione che implementa una versione della differenza centrale
+
 # f'(i) =  [f(i+nh)-f(i-nh)] / [x(i+nh)-x[i-nh]]
 
 timearray = time.to_numpy()
@@ -61,11 +62,11 @@ def my_derivative(xx, yy, nh):
     
     return dd/hh
 
-derivatadiffcensegn1 = my_derivative(timearray, signal1array, 20)
-derivatadiffcensegn2 = my_derivative(timearray, signal2array, 20)
+derivatadiffcensegn1 = my_derivative(timearray, signal1array, 20) #n=20
+derivatadiffcensegn2 = my_derivative(timearray, signal2array, 20) #n=20
 
 
-#Gafico delle due derivate con il metodo della differenza centrale 
+#Grafico delle due derivate con il metodo della differenza centrale 
 
 print('Grafico delle derivate dei due seganli tramite il metodo della differenza centrale')
 
