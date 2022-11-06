@@ -45,4 +45,3 @@ fig.suptitle('Grafico Distanza-Tempo', fontsize = 20)
 plt.legend()
 plt.grid(True)
 plt.show()
-
