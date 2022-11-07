@@ -75,9 +75,12 @@ def esercizio1():
     plt.grid(True)
     plt.show()
 
-    #Fit per trovare i parametri
+    #Fit per trovare i parametri , calcolo del chi-quadrato e dei gradi di liberta
     
     params, params_covariance = optimize.curve_fit(f = lognormale, xdata = x, ydata = y , sigma = erry, absolute_sigma = True, maxfev = 5000)
+    yfit = lognormale(x, params[0], params[1], params[2])
+    chi2 = np.sum((yfit- y)**2/y)
+    ndof = len(x)-len(params)
 
     #Controllo risultato fit
 
@@ -95,6 +98,10 @@ def esercizio1():
     print('Sigma   = {:3.0f} +- {:1.0f}'.format(params[0], math.sqrt(params_covariance[0,0])) ) 
     print('Mu = {:3.1f} +- {:1.1f}'.format(params[1], math.sqrt(params_covariance[1,1])) )
     print('A = {:3.2f} +- {:1.2f}'.format(params[2], math.sqrt(params_covariance[2,2])) )
+    print('Chi 2 = {:3.3f}'.format(chi2) )
+    print('Gradi di liberta = {:3.3f} '.format(ndof) )
+    print('Chi2 / Gradi di liberta = {:3.3f} '.format(chi2/ndof) )
+
 
     
 
