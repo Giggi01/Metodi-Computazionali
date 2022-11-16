@@ -1,3 +1,4 @@
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,5 +40,8 @@ print(len(freqsignal1))
 
 #Grafico (primo segnale) dello spettro di potenza
 
-plt.plot(np.absolute(fftsignal1[:fftsignal1.size//2])**2, 'o', markersize=4)
+
+plt.plot(np.absolute(fftsignal1[:fftsignal1.size//2]), 'o', markersize=4)
+plt.xscale('log')
+plt.yscale('log')
 plt.plot()
