@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -18,7 +17,6 @@ fig.suptitle('Grafico X-Y', fontsize = 20)
 plt.legend()
 plt.grid(True)
 plt.show()
-=======
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -108,4 +106,3 @@ def esercizio1():
 
 if __name__ == "__main__":
     esercizio1()
->>>>>>> 84b2dd7572971163d5835ed35ae91f98150bccb1
