@@ -20,9 +20,9 @@ signal3 = pd.read_csv('data_sample3.csv')
 
 #Grafico dei 3 signali in ingresso
 
-plt.plot(signal1['time'] , signal1['meas'] , 'o', label = 'Signal 1', color = 'green')
-plt.plot(signal2['time'] , signal2['meas'] , 'v', label='Signal 2', color='gold')
-plt.plot(signal3['time'] , signal3['meas'] , 's', label='Signal 3', color='blue')
+plt.plot(signal1['time'] , signal1['meas'] , 'o', label = 'Signal 1', color = 'blue')
+plt.plot(signal2['time'] , signal2['meas'] , 'v', label='Signal 2', color='darkorange')
+plt.plot(signal3['time'] , signal3['meas'] , 's', label='Signal 3', color='green')
 plt.xlabel('T [s]')
 plt.ylabel('Signal')
 plt.legend()
@@ -32,15 +32,13 @@ plt.show()
 
 
 fftsignal1 = fft.rfft(signal1['meas'].values)
-print(len(fftsignal1))
 fftsignal2 = fft.rfft(signal2['meas'].values)
 fftsignal3 = fft.rfft(signal3['meas'].values)
 
 snyquist = 0.5
 freqsignal1 = snyquist*fft.rfftfreq(fftsignal1.size) #d = 1
-print(len(freqsignal1))
 freqsignal2 = snyquist*fft.rfftfreq(fftsignal2.size) #d = 1
-freqsignal3= snyquist*fft.rfftfreq(fftsignal2.size) #d = 1
+freqsignal3 = snyquist*fft.rfftfreq(fftsignal3.size) #d = 1
 
 
 
@@ -55,44 +53,56 @@ plt.xscale('log')
 plt.yscale('log')
 plt.show()
 
-#Grafico dello spettro di potenza della prima in funzione della frequenza
+#Grafico dello spettro di potenza in funzione della frequenza
 
+ax1 = plt.subplot(311)
 plt.plot(freqsignal1[:int(fftsignal1.size/2)], np.absolute(fftsignal1[:int(fftsignal1.size/2)])**2, 'o', markersize = 4, color = 'blue')
-plt.xlabel('Frequenza [Hz]')
-plt.ylabel('Spettro di potenza $|c_k|^2$')
 plt.xscale('log')
 plt.yscale('log')
-plt.show()
+plt.title('Spettro di potenza in funzione della frequenza')
+plt.ylabel('$|c_k|^2$')
+plt.tick_params('x', labelbottom = False)
 
-#Grafico dello spettro di potenza del secondo segnale in funzione della frequenza
-
-plt.plot(freqsignal2[:int(fftsignal2.size/2)], np.absolute(fftsignal2[:int(fftsignal2.size/2)])**2, 'o', markersize = 4, color = 'orange')
-plt.xlabel('Frequenza [Hz]')
-plt.ylabel('Spettro di potenza $|c_k|^2$')
+ax2 = plt.subplot(312, sharex=ax1)
+plt.plot(freqsignal2[:int(fftsignal2.size/2)], np.absolute(fftsignal2[:int(fftsignal2.size/2)])**2, 'o', markersize = 4, color = 'darkorange')
 plt.xscale('log')
 plt.yscale('log')
-plt.show()
+plt.ylabel('$|c_k|^2$')
+plt.tick_params('x', labelbottom = False)
 
-#Grafico dello spettro di potenza del terzo segnale in funzione della frequenza
-
+ax3 = plt.subplot(313, sharex=ax1)
 plt.plot(freqsignal3[:int(fftsignal3.size/2)], np.absolute(fftsignal3[:int(fftsignal3.size/2)])**2, 'o', markersize = 4, color = 'green')
-plt.xlabel('Frequenza [Hz]')
-plt.ylabel('Spettro di potenza $|c_k|^2$')
 plt.xscale('log')
 plt.yscale('log')
+plt.xlabel('Frequenza [Hz]')
+plt.ylabel('$|c_k|^2$')
 plt.show()
 
-#Fit e grafico fittato dello spettro di potenza del primo segnale
+#Calcolo del fit
     
-params, params_covariance = optimize.curve_fit(f = funcnoise, xdata = freqsignal1[1:int(fftsignal1.size/2)] , ydata =  np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, maxfev = 5000)
-print(params[0], params[1])
-yfit = funcnoise(freqsignal1[1:int(fftsignal1.size/2)], params[0], params[1])
+params1, params_covariance1 = optimize.curve_fit(f = funcnoise, xdata = freqsignal1[1:int(fftsignal1.size/2)] , ydata =  np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, maxfev = 5000)
+yfit1 = funcnoise(freqsignal1[1:int(fftsignal1.size/2)], params1[0], params1[1])
+print(params1[0])
 
-plt.plot(freqsignal1[1:int(fftsignal1.size/2)], np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, 'o', markersize = 4)
-plt.plot(freqsignal1[1:int(fftsignal1.size/2)], yfit, '-', markersize = 4)
+params2, params_covariance2 = optimize.curve_fit(f = funcnoise, xdata = freqsignal2[1:int(fftsignal2.size/2)] , ydata =  np.absolute(fftsignal2[1:int(fftsignal2.size/2)])**2, maxfev = 5000)
+yfit2 = funcnoise(freqsignal2[1:int(fftsignal2.size/2)], params2[0], params2[1])
+print(params2[0])
+
+params3, params_covariance3 = optimize.curve_fit(f = funcnoise, xdata = freqsignal3[1:int(fftsignal3.size/2)] , ydata =  np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, maxfev = 5000)
+yfit3 = funcnoise(freqsignal3[1:int(fftsignal3.size/2)], params3[0], params3[1])
+print(params3[0])
+
+#Grafico del fitt dei tre segnali e identificazione del tipo di segnale
+
+#Sto plottando il grafico dle fitt del terzo segnale perche non mi torna (beta = 0.88 invece che beta = 2)
+
+plt.plot(freqsignal3[1:int(fftsignal2.size/2)], np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, 'o', markersize = 4)
+plt.plot(freqsignal3[1:int(fftsignal3.size/2)], yfit3, '-', markersize = 4, color = 'red')
 plt.xlabel('Frequenza [Hz]')
 plt.ylabel('Spettro di potenza $|c_k|^2$')
 plt.xscale('log')
 plt.yscale('log')
 plt.show()
+
+
 
