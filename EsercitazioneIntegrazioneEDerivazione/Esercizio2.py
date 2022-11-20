@@ -24,11 +24,11 @@ plt.show()
 
 #Definisco la funzione V(x)
 
-#def vx(x):
-    #pot = 0.1*x**6
-    #return pot
+def vx(x):
+    pot = 0.1*x**6
+    return pot
 
-#Creo un array di velocita al quadrato
+Creo un array di velocita al quadrato
 
 velocity = (np.gradient(xx))**2
 
