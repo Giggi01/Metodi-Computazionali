@@ -35,10 +35,10 @@ fftsignal1 = fft.rfft(signal1['meas'].values)
 fftsignal2 = fft.rfft(signal2['meas'].values)
 fftsignal3 = fft.rfft(signal3['meas'].values)
 
-snyquist = 0.5
-freqsignal1 = snyquist*fft.rfftfreq(fftsignal1.size) #d = 1
-freqsignal2 = snyquist*fft.rfftfreq(fftsignal2.size) #d = 1
-freqsignal3 = snyquist*fft.rfftfreq(fftsignal3.size) #d = 1
+nyquist = 0.5
+freqsignal1 = nyquist*fft.rfftfreq(fftsignal1.size) #d = 1
+freqsignal2 = nyquist*fft.rfftfreq(fftsignal2.size) #d = 1
+freqsignal3 = nyquist*fft.rfftfreq(fftsignal3.size) #d = 1
 
 
 
@@ -82,27 +82,47 @@ plt.show()
     
 params1, params_covariance1 = optimize.curve_fit(f = funcnoise, xdata = freqsignal1[1:int(fftsignal1.size/2)] , ydata =  np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, maxfev = 5000)
 yfit1 = funcnoise(freqsignal1[1:int(fftsignal1.size/2)], params1[0], params1[1])
-print(params1[0])
 
 params2, params_covariance2 = optimize.curve_fit(f = funcnoise, xdata = freqsignal2[1:int(fftsignal2.size/2)] , ydata =  np.absolute(fftsignal2[1:int(fftsignal2.size/2)])**2, maxfev = 5000)
 yfit2 = funcnoise(freqsignal2[1:int(fftsignal2.size/2)], params2[0], params2[1])
-print(params2[0])
 
-params3, params_covariance3 = optimize.curve_fit(f = funcnoise, xdata = freqsignal3[1:int(fftsignal3.size/2)] , ydata =  np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, maxfev = 5000)
+params3, params_covariance3 = optimize.curve_fit(f = funcnoise, xdata = freqsignal3[5:int(fftsignal3.size/2)] , ydata =  np.absolute(fftsignal3[5:int(fftsignal3.size/2)])**2, maxfev = 5000)
 yfit3 = funcnoise(freqsignal3[1:int(fftsignal3.size/2)], params3[0], params3[1])
-print(params3[0])
 
 #Grafico del fitt dei tre segnali e identificazione del tipo di segnale
 
-#Sto plottando il grafico dle fitt del terzo segnale perche non mi torna (beta = 0.88 invece che beta = 2)
+print(min(np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2))
 
-plt.plot(freqsignal3[1:int(fftsignal2.size/2)], np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, 'o', markersize = 4)
-plt.plot(freqsignal3[1:int(fftsignal3.size/2)], yfit3, '-', markersize = 4, color = 'red')
-plt.xlabel('Frequenza [Hz]')
-plt.ylabel('Spettro di potenza $|c_k|^2$')
+ax1 = plt.subplot(311)
+plt.plot(freqsignal1[1:int(fftsignal1.size/2)], np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, 'o', markersize = 4, color = 'gray')
+plt.plot(freqsignal1[1:int(fftsignal1.size/2)], yfit1, '-', markersize = 4, color = 'blue')
+plt.ylabel('$|c_k|^2$')
 plt.xscale('log')
 plt.yscale('log')
+plt.tick_params('x', labelbottom = False)
+
+print( '$Beta$ : {:1.3f} '.format(params1[0]))
+
+ax2 = plt.subplot(312, sharex=ax1)
+plt.plot(freqsignal2[1:int(fftsignal2.size/2)], np.absolute(fftsignal2[1:int(fftsignal2.size/2)])**2, 'o', markersize = 4, color = 'pink')
+plt.plot(freqsignal2[1:int(fftsignal2.size/2)], yfit2, '-', markersize = 4, color = 'blue')
+plt.xscale('log')
+plt.yscale('log')
+plt.ylabel('$|c_k|^2$')
+plt.tick_params('x', labelbottom = False)
+
+print( '$Beta$ : {:1.3f} '.format(params2[0]))
+
+ax3 = plt.subplot(313, sharex=ax1)
+plt.plot(freqsignal3[1:int(fftsignal2.size/2)], np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, 'o', markersize = 4, color = 'red')
+plt.plot(freqsignal3[1:int(fftsignal3.size/2)], yfit3, '-', markersize = 4, color = 'blue')
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('Frequenza [Hz]')
+plt.ylabel('$|c_k|^2$')
 plt.show()
+
+print( '$Beta$ : {:1.3f} '.format(params3[0]))
 
 
 
