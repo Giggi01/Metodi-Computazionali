@@ -35,10 +35,10 @@ fftsignal1 = fft.rfft(signal1['meas'].values)
 fftsignal2 = fft.rfft(signal2['meas'].values)
 fftsignal3 = fft.rfft(signal3['meas'].values)
 
-snyquist = 0.5
-freqsignal1 = snyquist*fft.rfftfreq(fftsignal1.size) #d = 1
-freqsignal2 = snyquist*fft.rfftfreq(fftsignal2.size) #d = 1
-freqsignal3 = snyquist*fft.rfftfreq(fftsignal3.size) #d = 1
+nyquist = 0.5
+freqsignal1 = nyquist*fft.rfftfreq(fftsignal1.size) #d = 1
+freqsignal2 = nyquist*fft.rfftfreq(fftsignal2.size) #d = 1
+freqsignal3 = nyquist*fft.rfftfreq(fftsignal3.size) #d = 1
 
 
 
@@ -88,21 +88,23 @@ params2, params_covariance2 = optimize.curve_fit(f = funcnoise, xdata = freqsign
 yfit2 = funcnoise(freqsignal2[1:int(fftsignal2.size/2)], params2[0], params2[1])
 print(params2[0])
 
-params3, params_covariance3 = optimize.curve_fit(f = funcnoise, xdata = freqsignal3[1:int(fftsignal3.size/2)] , ydata =  np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, maxfev = 5000)
+params3, params_covariance3 = optimize.curve_fit(f = funcnoise, xdata = freqsignal3[5:int(fftsignal3.size/2)] , ydata =  np.absolute(fftsignal3[5:int(fftsignal3.size/2)])**2, maxfev = 5000)
 yfit3 = funcnoise(freqsignal3[1:int(fftsignal3.size/2)], params3[0], params3[1])
 print(params3[0])
 
 #Grafico del fitt dei tre segnali e identificazione del tipo di segnale
 
-#Sto plottando il grafico dle fitt del terzo segnale perche non mi torna (beta = 0.88 invece che beta = 2)
-
-plt.plot(freqsignal3[1:int(fftsignal2.size/2)], np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, 'o', markersize = 4)
-plt.plot(freqsignal3[1:int(fftsignal3.size/2)], yfit3, '-', markersize = 4, color = 'red')
-plt.xlabel('Frequenza [Hz]')
-plt.ylabel('Spettro di potenza $|c_k|^2$')
-plt.xscale('log')
-plt.yscale('log')
+fig, ax = plt.subplots(2,1, figsize=(9,6), gridspec_kw={'height_ratios': [3, 1]}, sharex=True)
+#ax1 = plt.subplot(311)
+ax[0].plot(freqsignal1[1:int(fftsignal1.size/2)], np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, 'o', markersize = 4, color = 'gray')
+ax[0].errorbar(freqsignal1[1:int(fftsignal1.size/2)],  yfit1)
+ax[0].set_ylabel('$|c_k|^2$')
+#ax[0].set_xscale('log')
+#ax[0].set_yscale('log')
+ax[0].text(0, 0, '$Beta$ : {:1.3f} '.format(params1[0]), color='black')
+ax[0].tick_params('x', labelbottom = False)
 plt.show()
+
 
 
 
