@@ -18,14 +18,20 @@ def runwalk(s, passi):
         walky.append(walky[i]+dy)
     return walkx, walky
 
-#Grafico del random walker
+#Grafico 2D delle posizioni di 5 random walker per 1000 passi.
 
-random = runwalk(scalar, 1000)
-randomx = random[0]
-randomy = random[1]
+for i in range(0, 5, 1):
+    random = runwalk(scalar, 1000)
+    randomx = random[0]
+    randomy = random[1]
+    plt.plot(randomx, randomy, '-', label = 'RunWalker')
+plt.xlabel('Passi X')
+plt.ylabel('Passi Y')
+plt.legend()
+plt.show()
 
-print(len(randomx))
 
+#Grafico 2D della posizione di 1000 random walker dopo 10, 100 e 1000 passi.
 
 for i in range(0, 1000, 1):
     random = runwalk(scalar, 1000)
