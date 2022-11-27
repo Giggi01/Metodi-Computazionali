@@ -91,19 +91,29 @@ yfit3 = funcnoise(freqsignal3[1:int(fftsignal3.size/2)], params3[0], params3[1])
 
 #Grafico del fitt dei tre segnali e identificazione del tipo di segnale
 
-fig, ax = plt.subplots(2,1, figsize=(9,6), gridspec_kw={'height_ratios': [3, 1]}, sharex=True)
-#ax1 = plt.subplot(311)
-ax[0].plot(freqsignal1[1:int(fftsignal1.size/2)], np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, 'o', markersize = 4, color = 'gray')
-ax[0].errorbar(freqsignal1[1:int(fftsignal1.size/2)],  yfit1)
-ax[0].set_ylabel('$|c_k|^2$')
-#ax[0].set_xscale('log')
-#ax[0].set_yscale('log')
-ax[0].text(0, 0, '$Beta$ : {:1.3f} '.format(params1[0]), color='black')
-ax[0].tick_params('x', labelbottom = False)
+plt.plot(freqsignal1[1:int(fftsignal1.size/2)], np.absolute(fftsignal1[1:int(fftsignal1.size/2)])**2, 'o', color = 'grey')
+plt.plot(freqsignal1[1:int(fftsignal1.size/2)], yfit1, '-', color = 'blue')
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('Frequenza [Hz]')
+plt.ylabel('$|c_k|^2$')
 plt.show()
+print('Beta : ', params1[0])
 
-print( '$Beta$ : {:1.3f} '.format(params3[0]))
+plt.plot(freqsignal2[1:int(fftsignal2.size/2)], np.absolute(fftsignal2[1:int(fftsignal2.size/2)])**2, 'o', color = 'pink')
+plt.plot(freqsignal2[1:int(fftsignal2.size/2)], yfit2, '-', color = 'blue')
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('Frequenza [Hz]')
+plt.ylabel('$|c_k|^2$')
+plt.show()
+print('Beta : ', params2[0])
 
-
-
-
+plt.plot(freqsignal3[1:int(fftsignal3.size/2)], np.absolute(fftsignal3[1:int(fftsignal3.size/2)])**2, 'o', color = 'red')
+plt.plot(freqsignal3[1:int(fftsignal3.size/2)], yfit3, '-', color = 'blue')
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('Frequenza [Hz]')
+plt.ylabel('$|c_k|^2$')
+plt.show()
+print('Beta : ', params3[0])
