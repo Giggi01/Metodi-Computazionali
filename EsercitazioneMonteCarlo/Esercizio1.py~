@@ -1,0 +1,37 @@
+import numpy as np
+import scipy as sc
+import matplotlib.pyplot as plt
+import math
+
+scalar = 2.0
+
+#Funzione del random walker
+
+def runwalk(s, passi):
+    runwalk = ([])
+    walkx = [0.0]
+    walky = [0.0]
+    for i in range(0, passi, 1):
+        phi = np.random.uniform(low = 0.0,  high = 2*math.pi, size = 1)
+        dx = s*math.cos(phi)
+        dy = s*math.sin(phi)
+        walkx.append(walkx[i]+dx)
+        walky.append(walky[i]+dx)
+    runwalk.append(walkx)
+    runwalk.append(walky)
+    return runwalk
+
+#Funzione per piu random walker
+
+def multrandwalk(s, n, passi):
+    for i in range(0, n, 1):
+        runwalk(s, passi)
+    return runwalk
+        
+
+#Grafico del random walker
+
+print(runwalk(scalar,6))
+print(type(runwalk(scalar,6)))
+
+
