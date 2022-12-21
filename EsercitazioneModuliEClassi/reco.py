@@ -31,7 +31,7 @@ class Evento():
         self.tspan = 0
         self.hits = 0
 
-    def __gt __(self, tstart):
+    def __gt__(self, tstart):
         return self.tstart > other.tstart
 
     def AggHit (self, hit):

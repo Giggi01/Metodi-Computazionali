@@ -17,7 +17,7 @@ datimodulo3 = pd.read_csv('hit_times_M3.csv')
 
 timemodulo0 = datimodulo0['hit_time'].values
 plt.hist(timemodulo0, bins = 45)
-plt.ylabel('$Events$')
+plt.xlabel('$Hit$')
 plt.grid(True)
 plt.show()
 
@@ -28,7 +28,6 @@ mask0 = deltat > 0.0
 logdt = np.log10(deltat[mask0])
 plt.hist(logdt, bins = 100)
 plt.xlabel('$\Delta$time')
-plt.ylabel('$Events$')
 plt.grid(True)
 plt.show()
 
@@ -56,6 +55,7 @@ arrRH = np.append(arrRH, arrRH0)
 arrRH = np.append(arrRH, arrRH1)
 arrRH = np.append(arrRH, arrRH2)
 arrRH = np.append(arrRH, arrRH3)
+print(len(arrRH))
 
 #Utilizzo il metodo numpy.sort per ordinare cronologicamente l'array di tutti gli Hit
 
@@ -64,7 +64,9 @@ sortarrRH = np.sort(arrRH)
 #Calcolo i deltat per Hit consecutivi
 
 arrRHdeltat = np.diff(sortarrRH)
+print(len(arrRHdeltat))
 arrRHdeltat = arrRHdeltat.astype(int)
+#print(arrRHdeltat[:100])
 mask0 = arrRHdeltat > 0.0
 loghitdt = np.log10(arrRHdeltat[mask0])
 
@@ -72,11 +74,26 @@ loghitdt = np.log10(arrRHdeltat[mask0])
 
 plt.hist(loghitdt, 60)
 plt.xlabel('$log_10$$\Delta$time')
-plt.ylabel('$Events$')
-#plt.xscale('log')
+#plt.yscale('log')
 plt.grid(True)
 plt.show()
 
 ###PASSO 4###
 
-#
+#Creo una funzione che crei un array di oggetti di tipo reco.Event
+
+#twindow > 100
+
+def arrEvent(arrHit, twindow):
+    arrevents = np.array([])
+    lasttime = -9999
+    for i in arrHit:
+        if i.tsriv - lasttime > twindow:
+            arrevents = np.append(arrevents, rc.Event())
+        arrevents[-1].AggHit(i)
+        lasttime = i.tsriv
+    return arrevents
+        
+
+    
+    
